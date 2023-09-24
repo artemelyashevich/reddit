@@ -1,54 +1,58 @@
 package com.elyashevich.reddit.controller;
 
-import com.elyashevich.reddit.dto.PostCreateDto;
+import com.elyashevich.reddit.dto.PostDto;
 import com.elyashevich.reddit.model.Image;
 import com.elyashevich.reddit.model.Post;
+import com.elyashevich.reddit.service.ImageService;
 import com.elyashevich.reddit.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @RestController
+@CrossOrigin(origins = "http://127.0.0.1:5173/")
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
-    private final String post = "post";
+    private final ImageService imageService;
+    private final static String post = "post";
 
     @GetMapping
-    List<Post> getAll() {
+    public List<Post> getAll() {
         return postService.findAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    Post create(
-            final @RequestPart(post) PostCreateDto postDto,
+    public Post create(
+            final @RequestPart(post) PostDto postDto,
             final @RequestPart("imageFile") MultipartFile[] file
     ) throws IOException {
-        final Set<Image> images = uploadImage(file);
+        final Set<Image> images = imageService.uploadImage(file);
         return postService.create(postDto, images);
     }
 
-    public Set<Image> uploadImage(MultipartFile[] multipartFiles) throws IOException {
-        Set<Image> images = new HashSet<>();
+    @PutMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post update(final @RequestBody PostDto postDto) {
+        return postService.updateOne(postDto);
+    }
 
-        for (MultipartFile file : multipartFiles) {
-            Image image = Image.builder()
-                    .name(file.getOriginalFilename())
-                    .type(file.getContentType())
-                    .picByte(file.getBytes())
-                    .build();
-            images.add(image);
-        }
-        return images;
+    @GetMapping("/{id}")
+    public Post findById(final @PathVariable String id) {
+        return postService.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(final @PathVariable String id) {
+        postService.delete(id);
     }
 }

@@ -1,44 +1,61 @@
 package com.elyashevich.reddit.service.impl;
 
-import com.elyashevich.reddit.dto.TopicCreateDto;
-import com.elyashevich.reddit.exception.PersonException;
+import com.elyashevich.reddit.dto.TopicDto;
 import com.elyashevich.reddit.exception.TopicException;
 import com.elyashevich.reddit.mapping.TopicMapping;
 import com.elyashevich.reddit.model.Topic;
-import com.elyashevich.reddit.repository.PersonRepository;
 import com.elyashevich.reddit.repository.TopicRepository;
 import com.elyashevich.reddit.service.TopicService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TopicServiceImpl implements TopicService {
 
     private final TopicRepository topicRepository;
-    private final PersonRepository personRepository;
     private final TopicMapping topicMapping;
 
     @Override
     public List<Topic> findAll() {
+        log.info("FIND ALL TOPICS");
         return topicRepository.findAll();
     }
 
     @Override
     public Topic findById(String id) {
+        log.info("FIND TOPIC BY ID");
         return topicRepository.findById(id).orElseThrow(() ->
                 new TopicException(String.format("Topic with id = %s wasn't found!", id))
         );
     }
 
     @Override
-    public Topic create(TopicCreateDto topicDto) {
-        personRepository.findById(topicDto.personId()).orElseThrow(() ->
-                new PersonException(String.format("Person with id = %s wasn't found!", topicDto.personId()))
-        );
+    public Topic create(TopicDto topicDto) {
+        log.info("CREATE TOPIC");
+        findById(topicDto.id());
         final Topic topic = topicMapping.convert(topicDto);
+        return topicRepository.save(topic);
+    }
+
+    @Override
+    public void delete(String id) {
+        log.info("DELETE TOPIC");
+        final Topic topic = findById(id);
+        topicRepository.delete(topic);
+    }
+
+    @Override
+    public Topic updateOne(TopicDto topicDto) {
+        log.info("UPDATE TOPIC");
+        final Topic topic = findById(topicDto.id());
+        topic.setTitle(topicDto.title());
+        topic.setBody(topicDto.body());
+        topic.setImage(topicDto.image());
         return topicRepository.save(topic);
     }
 }

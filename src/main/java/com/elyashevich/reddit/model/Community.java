@@ -1,6 +1,8 @@
 package com.elyashevich.reddit.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,13 +29,18 @@ public class Community {
     @Id
     private String id;
 
+    @NotEmpty(message = "Title should not be empty")
+    @Size(min = 2, message = "Minimum title length is 2 characters")
     @TextIndexed
     @Indexed(unique = true)
     private String title;
 
+    @NotEmpty(message = "Description should not be empty")
+    @Size(min = 2, message = "Minimum description length is 2 characters")
     @TextIndexed
     private String description;
 
+    @NotEmpty(message = "Creator id should not be empty")
     private String creatorId;
 
     private List<String> people;

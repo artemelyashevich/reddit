@@ -1,6 +1,8 @@
 package com.elyashevich.reddit.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,10 +28,14 @@ public class Post {
     @Id
     private String id;
 
+    @NotEmpty(message = "Title should not be empty")
+    @Size(min = 2, message = "Minimum title length is 2 characters")
     @TextIndexed
     private String title;
 
     @TextIndexed
+    @NotEmpty(message = "Body should not be empty")
+    @Size(min = 2, message = "Minimum body length is 2 characters")
     private String body;
 
     private List<String> comments;

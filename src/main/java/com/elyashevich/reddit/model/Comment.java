@@ -1,6 +1,8 @@
 package com.elyashevich.reddit.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,11 +27,15 @@ public class Comment {
     @Id
     private String id;
 
+    @NotEmpty(message = "Body should not be empty")
+    @Size(min = 1, message = "Minimum body length is 1 characters")
     @TextIndexed
     private String body;
 
+    @NotEmpty(message = "Creator id should not be empty")
     private String creatorId;
 
+    @NotEmpty(message = "Post id should not be empty")
     private String postId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

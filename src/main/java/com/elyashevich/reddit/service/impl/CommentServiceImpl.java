@@ -1,6 +1,6 @@
 package com.elyashevich.reddit.service.impl;
 
-import com.elyashevich.reddit.dto.CommentCreateDto;
+import com.elyashevich.reddit.dto.CommentDto;
 import com.elyashevich.reddit.exception.CommentException;
 import com.elyashevich.reddit.exception.PersonException;
 import com.elyashevich.reddit.exception.PostException;
@@ -12,10 +12,12 @@ import com.elyashevich.reddit.repository.PersonRepository;
 import com.elyashevich.reddit.repository.PostRepository;
 import com.elyashevich.reddit.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -27,11 +29,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> findAll() {
+        log.info("FIND ALL COMMENTS");
         return commentRepository.findAll();
     }
 
     @Override
-    public Comment create(CommentCreateDto commentDto) {
+    public Comment create(CommentDto commentDto) {
+        log.info("CREATE COMMENT");
         personRepository.findById(commentDto.personId()).orElseThrow(() ->
                 new PersonException(String.format("Person with id = %s wasn't found!", commentDto.personId()))
         );
@@ -49,8 +53,21 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment findById(String id) {
+        log.info("FIND COMMENT BY ID");
         return commentRepository.findById(id).orElseThrow(() ->
                 new CommentException(String.format("Comment with id = %s wasn't found!", id))
         );
+    }
+
+    @Override
+    public void delete(String id) {
+        log.info("DELETE COMMENT");
+        final Comment comment = findById(id);
+        commentRepository.delete(comment);
+    }
+
+    @Override
+    public Comment update(CommentDto commentDto) {
+        return null;
     }
 }
