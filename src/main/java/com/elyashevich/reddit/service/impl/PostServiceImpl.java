@@ -51,9 +51,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post findById(String id) {
         log.info("FIND POST BY ID");
-        return postRepository.findById(id).orElseThrow(() ->
+        Post post = postRepository.findById(id).orElseThrow(() ->
                 new PostException(String.format("Post with id = %s wasn't found", id))
         );
+        return addView(post);
     }
 
     @Override
@@ -69,9 +70,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Post setRating(String id, PostDto postDto) {
+        log.info("SET RATING POST");
+        Post post = findById(id);
+        post.setRating(postDto.rating());
+        return postRepository.save(post);
+    }
+
+    @Override
     public void delete(String id) {
         log.info("DELETE POST");
         final Post post = findById(id);
         postRepository.delete(post);
+    }
+
+    private Post addView(Post post) {
+        post.setViews(post.getViews() + 1);
+        return postRepository.save(post);
     }
 }

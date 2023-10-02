@@ -3,7 +3,6 @@ package com.elyashevich.reddit.controller;
 import com.elyashevich.reddit.dto.CommentDto;
 import com.elyashevich.reddit.model.Comment;
 import com.elyashevich.reddit.service.CommentService;
-import com.elyashevich.reddit.utils.CorsUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = CorsUtils.CORS)
+@CrossOrigin(origins = "http://127.0.0.1:5173")
 @RequestMapping("/api/v1/comments")
 @RequiredArgsConstructor
 public class CommentController {

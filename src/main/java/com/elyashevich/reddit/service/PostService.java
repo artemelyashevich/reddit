@@ -12,5 +12,6 @@ public interface PostService {
     List<Post> findAll();
     Post findById(String id);
     Post updateOne(PostDto postDto);
+    Post setRating(String id, PostDto postDto);
     void delete(String id);
 }

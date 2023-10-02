@@ -1,7 +1,10 @@
 package com.elyashevich.reddit.dto;
 
+import com.elyashevich.reddit.model.Rating;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+
+import java.util.Set;
 
 public record PostDto(
         String id,
@@ -12,5 +15,6 @@ public record PostDto(
         @Size(min = 2, message = "Minimum body length is 2 characters")
         String body,
         @NotEmpty(message = "Person id should not be empty")
-        String personId
+        String personId,
+        Rating rating
 ) {}

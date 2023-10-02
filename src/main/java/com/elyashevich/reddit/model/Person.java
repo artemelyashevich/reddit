@@ -14,8 +14,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Document(collection = "people")
@@ -54,6 +54,8 @@ public class Person {
 
     private List<String> posts;
 
+    private List<String> roles;
+
     private List<Community> communities;
 
     @Override
@@ -66,4 +68,29 @@ public class Person {
                 ", updated=" + updated +
                 '}';
     }
+/*
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }*/
 }
