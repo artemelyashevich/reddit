@@ -15,6 +15,7 @@ public class PersonMapping {
                 .password(personDto.email())
                 .posts(new ArrayList<>())
                 .communities(new ArrayList<>())
+                .roles(new ArrayList<>())
                 .build();
     }
 }

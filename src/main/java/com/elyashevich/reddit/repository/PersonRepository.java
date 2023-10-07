@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface PersonRepository extends MongoRepository<Person, String> {
     @Query("{ 'username' : ?0 }")
-    Optional<Person> findByUsername(String username);
+    List<Person> findByUsername(String username);
 }
