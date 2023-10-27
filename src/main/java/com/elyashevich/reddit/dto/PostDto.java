@@ -4,8 +4,6 @@ import com.elyashevich.reddit.model.Rating;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-import java.util.Set;
-
 public record PostDto(
         String id,
         @NotEmpty(message = "Title should not be empty")

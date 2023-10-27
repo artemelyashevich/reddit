@@ -27,7 +27,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Topic findById(String id) {
+    public Topic findById(final String id) {
         log.info("FIND TOPIC BY ID");
         return topicRepository.findById(id).orElseThrow(() ->
                 new TopicException(String.format("Topic with id = %s wasn't found!", id))
@@ -35,7 +35,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Topic create(TopicDto topicDto) {
+    public Topic create(final TopicDto topicDto) {
         log.info("CREATE TOPIC");
         findById(topicDto.id());
         final Topic topic = topicMapping.convert(topicDto);
@@ -43,14 +43,14 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         log.info("DELETE TOPIC");
         final Topic topic = findById(id);
         topicRepository.delete(topic);
     }
 
     @Override
-    public Topic updateOne(TopicDto topicDto) {
+    public Topic updateOne(final TopicDto topicDto) {
         log.info("UPDATE TOPIC");
         final Topic topic = findById(topicDto.id());
         topic.setTitle(topicDto.title());

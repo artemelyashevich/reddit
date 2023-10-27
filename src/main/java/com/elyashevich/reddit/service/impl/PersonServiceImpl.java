@@ -22,7 +22,7 @@ public class PersonServiceImpl implements PersonService {
     private final PersonMapping personMapping;
 
     @Override
-    public Person create(PersonDto personDto) {
+    public Person create(final PersonDto personDto) {
         log.info("CREATE PERSON");
         final Person person = personMapping.convert(personDto);
         return personRepository.save(person);
@@ -35,7 +35,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person getPersonById(String id) {
+    public Person getPersonById(final String id) {
         log.info("FIND PERSON BY ID");
         return personRepository.findById(id).orElseThrow(() ->
                 new PersonException(String.format("Person with id = %s wasn't found!", id))
@@ -43,14 +43,14 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         log.info("DELETE PERSON");
         final Person person = getPersonById(id);
         personRepository.delete(person);
     }
 
     @Override
-    public Person updateOne(PersonDto personDto) {
+    public Person updateOne(final PersonDto personDto) {
         log.info("UPDATE PERSON");
         final Person person = getPersonById(personDto.id());
         person.setUsername(personDto.username());

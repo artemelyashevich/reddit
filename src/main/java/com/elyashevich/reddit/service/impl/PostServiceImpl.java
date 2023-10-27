@@ -29,7 +29,7 @@ public class PostServiceImpl implements PostService {
     private final PersonService personService;
 
     @Override
-    public Post create(PostDto postDto, Set<Image> images) {
+    public Post create(final PostDto postDto,final Set<Image> images) {
         log.info("CREATE POST");
         final Person person = personService.getPersonById(postDto.personId());
         final Post post = postMapping.convert(postDto, person.getId());
@@ -49,16 +49,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post findById(String id) {
+    public Post findById(final String id) {
         log.info("FIND POST BY ID");
-        Post post = postRepository.findById(id).orElseThrow(() ->
+        final Post post = postRepository.findById(id).orElseThrow(() ->
                 new PostException(String.format("Post with id = %s wasn't found", id))
         );
         return addView(post);
     }
 
     @Override
-    public Post updateOne(PostDto postDto) {
+    public Post updateOne(final PostDto postDto) {
         log.info("UPDATE POST");
         final Post post = findById(postDto.id());
         personService.getPersonById(postDto.personId());
@@ -70,7 +70,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post setRating(String id, PostDto postDto) {
+    public Post setRating(final String id, final PostDto postDto) {
         log.info("SET RATING POST");
         Post post = findById(id);
         post.setRating(postDto.rating());
@@ -78,13 +78,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         log.info("DELETE POST");
         final Post post = findById(id);
         postRepository.delete(post);
     }
 
-    private Post addView(Post post) {
+    private Post addView(final Post post) {
         post.setViews(post.getViews() + 1);
         return postRepository.save(post);
     }

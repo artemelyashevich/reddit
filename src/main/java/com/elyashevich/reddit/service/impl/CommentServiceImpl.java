@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -34,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment create(CommentDto commentDto) {
+    public Comment create(final CommentDto commentDto) {
         log.info("CREATE COMMENT");
         personRepository.findById(commentDto.personId()).orElseThrow(() ->
                 new PersonException(String.format("Person with id = %s wasn't found!", commentDto.personId()))
@@ -52,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment findById(String id) {
+    public Comment findById(final String id) {
         log.info("FIND COMMENT BY ID");
         return commentRepository.findById(id).orElseThrow(() ->
                 new CommentException(String.format("Comment with id = %s wasn't found!", id))
@@ -60,14 +61,19 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         log.info("DELETE COMMENT");
         final Comment comment = findById(id);
         commentRepository.delete(comment);
     }
 
     @Override
-    public Comment update(CommentDto commentDto) {
-        return null;
+    public Comment update(final CommentDto commentDto) {
+        log.info("UPDATE COMMENT");
+        final Comment comment = findById(commentDto.id());
+        comment.setBody(commentDto.body());
+        comment.setUpdated(LocalDateTime.now());
+        commentRepository.save(comment);
+        return comment;
     }
 }

@@ -18,7 +18,7 @@ public class ImageServiceImpl implements ImageService {
     private final ImageMapping imageMapping;
 
     @Override
-    public Set<Image> uploadImage(MultipartFile[] multipartFiles) throws IOException {
+    public Set<Image> uploadImage(final MultipartFile[] multipartFiles) throws IOException {
         Set<Image> images = new HashSet<>();
         for (MultipartFile file : multipartFiles) {
             Image image = imageMapping.convert(file);
